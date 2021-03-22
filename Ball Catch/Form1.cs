@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 namespace Ball_Catch
 {
+    string gameState = "waiting";
+
     public partial class Form1 : Form
     {
         int heroX = 280;
@@ -42,6 +44,37 @@ namespace Ball_Catch
         {
             InitializeComponent();
         }
+        public void GameInitialize()
+
+        {
+
+            titleLabel.Text = "";
+
+            subTitleLabel.Text = "";
+
+
+
+            gameTimer.Enabled = true;
+
+            gameState = "running";
+
+            time = 500;
+
+            score = 0;
+
+            ballXList.Clear();
+
+            ballYList.Clear();
+
+            ballSpeedList.Clear();
+
+
+
+            heroX = this.Width / 2 - heroWidth / 2;
+
+            heroY = this.Height - 540 - heroHeight;
+
+        }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -53,6 +86,32 @@ namespace Ball_Catch
                 case Keys.Right:
                     rightDown = true;
                     break;
+            
+            
+                case Keys.Space:
+
+                    if (gameState == "waiting" || gameState == "over")
+
+                    {
+
+                        GameInitialize();
+
+                    }
+
+                    break;
+
+                case Keys.Escape:
+
+                    if (gameState == "waiting" || gameState == "over")
+
+                    {
+
+                        Application.Exit();
+
+                    }
+
+                    break;
+
             }
 
         }
@@ -73,6 +132,46 @@ namespace Ball_Catch
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            if (gameState == "waiting")
+
+            {
+
+                titleLabel.Text = "BALL CATCH";
+
+                subTitleLabel.Text = "Press Space Bar to Start or Escape to Exit";
+
+            }
+            else if (gameState == "running")
+
+            {
+
+                // draw text at top 
+
+                timeLabel.Text = $"Time Left: {time}";
+
+                scoreLabel.Text = $"Score: {score}";
+            }
+            else if (gameState == "over")
+
+            {
+
+                timeLabel.Text = "";
+
+                scoreLabel.Text = "";
+
+
+
+                titleLabel.Text = "GAME OVER";
+
+
+
+                subTitleLabel.Text = $"Your final score was {score}";
+
+                subTitleLabel.Text += "\nPress Space Bar to Start or Escape to Exit";
+
+            }
+
+
             //update labels 
 
             timeLabel.Text = $"Time Left: {time}";
@@ -200,6 +299,7 @@ namespace Ball_Catch
             if (time == 0)
             {
                 gameTimer.Enabled = false;
+                gameState = "over";
             }
 
        
